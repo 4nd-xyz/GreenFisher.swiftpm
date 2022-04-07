@@ -8,7 +8,8 @@ public final class GameScene: SKScene {
   private let tree = Tree()
   private let watter = Watter()
   private let playerNode = PlayerSKNode()
-  private lazy var score = Score(action: {_ in })
+  private let fishermanNode = FishermanSKNode()
+  private lazy var score = Score(action: endGame)
   private lazy var gamePad: GamePad = {
     return GamePad(
       actionButtonBegan:  playerNode.actionButtonBegan,
@@ -33,6 +34,7 @@ public final class GameScene: SKScene {
     addChild(edge)
     addChild(playerNode)
     addChild(gamePad)
+    addChild(fishermanNode)
     addChild(controllerSpace)
     addChild(score)
     addChild(paredeEsquerda)
@@ -54,6 +56,7 @@ public final class GameScene: SKScene {
     score.position =  CGPoint(x: frame.width / 2, y: frame.height * 0.8)
     
     // Character
+    fishermanNode.position = CGPoint(x: frame.width * 0.7, y: frame.height * 0.3)
     playerNode.position = CGPoint(x: Screen.screenWidth * 0.1, y: Screen.screenHeight / 2)
     
     // Cria cenario
@@ -82,6 +85,7 @@ public final class GameScene: SKScene {
     
     // Resetar os estados
     playerNode.resetNode()
+    fishermanNode.resetNode()
     
     // Resetar o placar
     score.resetNode()
@@ -108,5 +112,7 @@ public final class GameScene: SKScene {
     return paredeNode
   }
   
-  
+  func endGame(winner: Winner) {
+
+  }
 }
