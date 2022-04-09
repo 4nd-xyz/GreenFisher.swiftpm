@@ -113,6 +113,13 @@ public final class GameScene: SKScene {
   }
   
   func endGame(winner: Winner) {
-
+    //Para o bot
+    playerNode.stateMachine.enter(PlayerIdle.self)
+    fishermanNode.stateMachine.enter(FishermanStop.self)
+    
+    // Tempo de espera
+    guard let view = self.view as? MySKView else { fatalError("--> Deu ruim na view") }
+    (winner == .player) ? view.presentWin() : view.presentGameOver()
+    
   }
 }
