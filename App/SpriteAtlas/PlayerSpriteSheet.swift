@@ -3,13 +3,11 @@ import SpriteKit
 public struct PlayerSpriteSheet {
   private static let player = SKTexture(imageNamed: "player")
   
-  
   // MARK: - Factor
   static func makeAnimation(origin: CGRect, size: CGSize = .bit_25) -> [SKTexture] {
     var textures = [SKTexture]()
-    for i in 0...7 {
-      
-      let point = CGRect(origin: CGPoint(x: CGFloat(i > 3 ?  i - 4 : i) * origin.maxX, y: origin.minY), size: CGSize(width: 0.25, height: 0.25))
+    for i in 0...3 {
+      let point = CGRect(origin: CGPoint(x: CGFloat(i) * origin.maxX, y: origin.minY), size: CGSize(width: 0.25, height: 0.25))
       let textura = SKTexture(rect: point, in: player)
       textura.filteringMode = .nearest
       textures.append(textura)

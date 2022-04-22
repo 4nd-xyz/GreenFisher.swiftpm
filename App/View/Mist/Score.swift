@@ -1,13 +1,32 @@
 import Foundation
 import SpriteKit
 
-public class Score: SKLabelNode {
-  // Action de controle de virtoria
+public class Score: SKNode {
+  // virtoria control action
   var game: GameControll
+  
+  private lazy var background: SKShapeNode  = {
+  let shape = SKShapeNode(rectOf: CGSize(width: Screen.screenWidth, height: PixelSize.size * Scale.ground))
+    shape.fillColor = UIColor._0x1!
+    shape.zPosition = Zposition.score - 1
+    shape.strokeColor = .clear
+    return shape
+  }()
+  
+  private lazy var label: SKLabelNode = {
+    let label = SKLabelNode(text: "Player 0 LB  *  Friend 0 LB")
+    label.horizontalAlignmentMode = .center
+    label.verticalAlignmentMode = .center
+    label.zPosition = Zposition.score
+    label.fontColor = UIColor._0x3
+    label.fontName = UIFont.makeFont()
+    label.name = "Score"
+    return label
+  }()
   
   var scorePlayer = 0 {
     didSet {
-      text = "Player \(scorePlayer) KG  *  FishMan \(scoreFishMan) KG"
+      label.text = "Player \(scorePlayer) LB  *  Friend \(scoreFishMan) LB"
     }
     willSet {
       if newValue >= 99 {
@@ -19,7 +38,7 @@ public class Score: SKLabelNode {
   
   var scoreFishMan = 0 {
     didSet {
-      text = "Player \(scorePlayer) KG  *  FishMan \(scoreFishMan) KG"
+      label.text = "Player \(scorePlayer) LB  *  Friend \(scoreFishMan) LB"
     }
     willSet {
       if newValue >= 99 {
@@ -30,15 +49,12 @@ public class Score: SKLabelNode {
   
   init(action: @escaping (Winner)->Void) {
     game = GameControll(actionEndGame: action)
-    
     super.init()
-    text = "Player 0 KG  *  FishMan 0 KG"
-    horizontalAlignmentMode = .center
-    zPosition = Zposition.score
-    fontColor = ._0x0
-    fontName = UIFont.makeFont()
-    name = "Score"
+    
+    addChild(background)
+    addChild(label)
   }
+  
   
   func resetNode() {
     scorePlayer = 0

@@ -5,15 +5,14 @@ import GameplayKit
 public class PlayerSKNode: SKNode {
   var fishY: Fish?
   
-  // Teclado
   lazy var player: Player = {
     let player = Player()
     player.delegate = self
     return player
   }()
   
-  // Tecla do teclado
-  var swipeDiretion: UInt16 = .downArrow
+  // Keyboard key
+  var swipeDiretion: UInt32 = .upArrow
   
   // NodeFish
   lazy var nodeFish: SKNode = {
@@ -26,7 +25,7 @@ public class PlayerSKNode: SKNode {
     PlayerMoveRight(node: self),
     PlayerMoveUp(node: self),
     PlayerMoveDown(node: self),
-    PlayerMoveLight(node: self),
+    PlayerMoveLeft(node: self),
     PlayerIdle(node: self),
     PlayerFishing(node: self),
     PlayerBitFish(node: self),
@@ -44,9 +43,8 @@ public class PlayerSKNode: SKNode {
     sprite.physicsBody = SKPhysicsBody(rectangleOf: sprite.frame.size)
     sprite.physicsBody?.affectedByGravity = false
     sprite.physicsBody?.allowsRotation = false
-    sprite.physicsBody?.contactTestBitMask = BitMask.player
     sprite.physicsBody?.collisionBitMask = BitMask.player
-    
+    sprite.physicsBody?.contactTestBitMask = BitMask.playerContact
     return sprite
   }()
   
@@ -71,7 +69,7 @@ public class PlayerSKNode: SKNode {
       checkStateFish()
       break
     case .leftArrow:
-      stateMachine.enter(PlayerMoveLight.self)
+      stateMachine.enter(PlayerMoveLeft.self)
     case .upArrow:
       stateMachine.enter(PlayerMoveUp.self)
     case .downArrow:
@@ -82,22 +80,21 @@ public class PlayerSKNode: SKNode {
   }
   
   func checkStateFish() {
-    // Verificar colizacao com agua
+    // Check colization with water
     switch stateMachine.currentState {
     case is PlayerFishing:
-      // Remove acao depsca para sobrecreve
+      // Remove depsca action to overwrite
       nodeFish.removeAllActions()
       stateMachine.enter(PlayerIdle.self)
-      // Caso space muda para parado
+      // Case space changes to stopped
     case is PlayerNoCatchFish, is PlayerCatchFish:
       stateMachine.enter(PlayerIdle.self)
-    case is PlayerBitFish: // Caso tenha um peixe baseado em quickTime
+    case is PlayerBitFish: // If you have a quickTime based fish
       stateMachine.enter(PlayerCatchFish.self)
     case is PlayerIdle:
-      // Caso parado comeca a pescar
-      // Se tiver contato com agua
-      if let corpo = skSPrite.physicsBody?.allContactedBodies().first,
-        corpo.categoryBitMask == BitMask.watter  {
+      if let corpos = skSPrite.physicsBody?.allContactedBodies().filter({
+        $0.categoryBitMask & BitMask.playerContact != 0 && $0.categoryBitMask == swipeDiretion }
+      ), !corpos.isEmpty {
         stateMachine.enter(PlayerFishing.self)
       }
     case .none:
@@ -121,7 +118,7 @@ public class PlayerSKNode: SKNode {
 
 extension PlayerSKNode: FishingDelegate {
   
-  // Retorna o usado nas acoes
+  // Returns used in actions
   func getNode() -> SKNode {
     return nodeFish
   }
@@ -129,23 +126,22 @@ extension PlayerSKNode: FishingDelegate {
   func startFish() { }
   
   func bitFish(_ fish: Fish) {
-    // Pesca
+    // fishing
     self.fishY = fish
-    dump(fishY)
-    // Entra no estado de fisgado
+    
+    // Enter hooked state
     stateMachine.enter(PlayerBitFish.self)
   }
   
   func notGetFish() {
-    print("---> notGetFish")
-    // Caso o peixe não tenha mordido
+    // If the fish hasn't bitten
     stateMachine.enter(PlayerNoCatchFish.self)
   }
   
   func endQuickTimeEvent() {
-    guard let state = stateMachine.currentState else { fatalError("Deu ruim no estado") }
+    guard let state = stateMachine.currentState else { fatalError("It went bad in the state") }
     
-    // Caso tenha dado o quickTime Envent
+    // If you have given the quickTime Envent
     if state is PlayerBitFish {
       stateMachine.enter(PlayerNoCatchFish.self)
     }

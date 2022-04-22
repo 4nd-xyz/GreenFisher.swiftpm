@@ -13,7 +13,9 @@ public class Tree: SKNode {
   public func createMap() {
     let node = createVerticalGround()
     let posss = node.copy() as! SKNode
-    posss.position.y += Screen.screenHeight - sizePixel
+    
+    // Minus the size of the score
+    posss.position.y += Screen.screenHeight - (sizePixel + PixelSize.ground)
     addChild(posss)
     addChild(node)
   }
