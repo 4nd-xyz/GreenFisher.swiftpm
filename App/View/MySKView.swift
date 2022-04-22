@@ -1,11 +1,13 @@
 import SpriteKit
 
 public final class MySKView: SKView {
+  
   private let frameView = CGRect(origin: .zero, size: Screen.screenSize)
+  private lazy var titleScene = TitleScene(size: frameView.size)
   private lazy var sceneView = GameScene(size: frameView.size)
   private lazy var sceneGameOver = GameOver(size: frameView.size)
   private lazy var sceneWin = WinScene(size: frameView.size)
-  private let transion = SKTransition.fade(withDuration: 1)
+  private let transion = SKTransition.fade(withDuration: 1.0)
   
   public init() {
     super.init(frame: frameView)
@@ -21,10 +23,13 @@ public final class MySKView: SKView {
     self.presentScene(sceneWin, transition: transion)
   }
   
-   public func presentMainSceneTransition() {
-    self.presentScene(sceneView, transition: transion)
+  public func presentTitleScene() {
+    self.presentScene(titleScene, transition: transion)
   }
   
+  public func presentMainSceneTransition() {
+    self.presentScene(sceneView, transition: transion)
+  }
   
   public func presentMainScene() {
     self.presentScene(sceneView)
