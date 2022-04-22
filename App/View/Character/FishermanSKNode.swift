@@ -5,7 +5,7 @@ import GameKit
 public class FishermanSKNode: SKNode {
   let fisherman = Fisherman()
   
-  // Estado de pesca
+  // Fishing status
   lazy var stateMachine = GKStateMachine(states: [
     FishermanIdle(node: self),
     FishermanFishing(node: self),
@@ -56,10 +56,10 @@ extension FishermanSKNode: FishingDelegate {
     return nodeFish
   }
   
-  // Comecou a pesca
+  // started fishing
   func startFish() { stateMachine.enter(FishermanFishing.self) }
   
-  // Peixe fisgado
+  // Hooked fish
   func bitFish(_ fish: Fish) { stateMachine.enter(FishermanBitFish.self) }
   func notGetFish() { stateMachine.enter(FishermanIdle.self) }
   func endQuickTimeEvent() { stateMachine.enter(FishermanIdle.self) }

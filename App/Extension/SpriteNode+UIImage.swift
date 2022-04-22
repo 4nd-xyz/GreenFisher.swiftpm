@@ -10,16 +10,16 @@ import SpriteKit
 extension SKSpriteNode {
   static func makeSystemImage(systemName: String, size: CGFloat, color: UIColor) -> SKSpriteNode {
     
-    // Criar a configuracao do systemimage
+    // Create the systemimage configuration
     let font = UIFont.systemFont(ofSize: CGFloat(size))
     let config = UIImage.SymbolConfiguration(font: font)
     
-    // Mudar a cor da image
+    // Change the color of the image
     guard let image = UIImage(systemName: systemName, withConfiguration: config)?.tint(with: color) else {
-      fatalError("Deu ruim image")
+      fatalError("Bad image")
     }
     
-    // Cria a sprite
+    // Creates the sprite
     let texture = SKTexture(image: image)
     let sprite = SKSpriteNode(texture: texture)
     return sprite

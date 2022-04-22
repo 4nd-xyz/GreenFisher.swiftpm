@@ -11,7 +11,7 @@ extension Random {
     return distribution.nextInt()
   }
   
-  // Numeros aletorios baseados em uma media
+  // Random numbers based on an averag
   func normalDistribution(low :Int, high: Int) -> Int {
     let distribution = GKGaussianDistribution(lowestValue: low, highestValue: high)
     return distribution.nextInt()

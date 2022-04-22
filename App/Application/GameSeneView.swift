@@ -1,6 +1,6 @@
 //
 //  GameSeneView.swift
-//  wwdc2022
+//  GreenFisher
 //
 //  Created by Anderson on 07/04/22.
 //
@@ -12,7 +12,7 @@ struct GameSeneView: UIViewRepresentable {
   
   func makeUIView(context: UIViewRepresentableContext<GameSeneView>) -> SKView {
     let view = MySKView()
-    view.presentMainScene()
+    view.presentTitleScene()
     return view
   }
   

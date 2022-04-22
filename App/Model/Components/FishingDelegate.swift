@@ -3,29 +3,29 @@ import SpriteKit
 
 protocol FishingDelegate: AnyObject {
   
-  // Pega o node
+  // Get the node
   func getNode() -> SKNode
   
-  // Comecou a pescar
+  // Started fishing
   func startFish()
   
-  // Chamado quando o peixe fisgou
+  // Called when the fish has hooked
   func bitFish(_ fish: Fish)
   
-//  // Confição para verficar se pescou o peixe
-//  func fishingCondition() -> Bool
+  // Condition to check if you caught the fish
+  // func fishingCondition() -> Bool
   
-//  // Chamando quando pegou o peixe
-//  func getFish(_ fish: Fish)
-//
+  // Calling when caught fish
+  // func getFish(_ fish: Fish)
+  //
   // Chamdo quando não pegao peixe
   func notGetFish()
   
-  // Verificar o espado do personage
-  // se apertou o botao pegou peixe
-  // Caso não mudaro estado de bitFish
+  // Check the character space
+  // if you pressed the catch button
+  // If you don't change the bitFish state
+  // When you finish QuickTimeEnvent
   
-  // Quando termina QuickTimeEnvent
   func endQuickTimeEvent()
   
 }

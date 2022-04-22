@@ -5,47 +5,47 @@ protocol Fishing: AnyObject, Random {
   
   // MARK: - BitFishing
   
-  // Probalidade do peixe moder a isca
+  // Probability of fish moderates the bait
   var bitChance: Int { get }
   
-  // Probalide fazer o gancho no peixe
+  // Probalide to hook the fish
   //var hookChance
   
-  // Tempo da pesca
+  // fishing time
   var timeFishing: Double { get }
   
-  // Outro numero aletorio para compara com
-  // bitChance se menor que pesca se não Fesca
+  // Another random number to compare with
+  // bitChance if less than fish if not Fesca
   var bitValue: Int { get }
   
-  // Cancelar se player aperter um botao errado
+  // Cancel if player presses a wrong button
   var fish: Fish? { get set }
   
   // MARK: - QuickTimeEvent
   
-  // Colocar o peixe
-  // Tempo aletorio usando (Paseado no peixe)
+  // Place the fish
+  // Random time using (Based on fish)
   //var timeHook: Int { get }
   
   // MARK: - Fishing
   var delegate: FishingDelegate? { get set }
   
-  // Funcao chamada para pesca
+  // Function called for fishing
   func fishing()
   
-  // Cria o peixe
+  // Create the fish
   func makeFish() -> Fish
-  // Função para a chamar caso verifica se pescou
-  // Outro numero aletorio para comparar com
-  // hookChance se menor pesca se não pesca
-  // Caso aperte o botao mostra no quicktime
+  // Function to call it if it checks if it's caught
+  // Another random number to compare with
+  // hookChance if less fish if no fish
+  // If you press the button, it shows in quicktime
   
 }
 
 extension Fishing {
   
   var bitChance: Int {
-    // 30 %  max de change do peixe não fiscar
+    // 30 % max change from fish not fish
     randomInteger(low: 70, high: 100)
   }
   
@@ -54,14 +54,14 @@ extension Fishing {
   }
   
   var timeFishing: Double {
-    Double(randomInteger(low: 4, high: 6))
+    Double(randomInteger(low: 4, high: 8))
   }
   
   func fishing() {
     
     let node = delegate?.getNode()
     delegate?.startFish()
-    print("Comecou a pescar--->")
+    
     
     // Action time fish
     let actionFish = SKAction.sequence([
@@ -69,44 +69,41 @@ extension Fishing {
       SKAction.run { bitFish(node: node) }
     ])
     
-    // Roda a acao de pesca
+    // Run the fishing action
     node?.run(actionFish)
     
-    // Verifica se o peixe fiscou
+    // Check if the fish caught
     func bitFish(node: SKNode?) {
       
-      // Caso o peixe fisgou
+      // In case the fish caught
       if bitValue <= bitChance {
         
         
         self.fish = makeFish()
-        guard let fish = self.fish else { fatalError("Deu ruim na pesca")}
+        guard let fish = self.fish else { fatalError("It was bad at fishing")}
         delegate?.bitFish(fish)
 
-        print("bitFish --->")
-
-        // Peixe pego
+        // fish caught
         let actionHusk = SKAction.sequence([
-          // Tempo de espera do Quik time event paseado peixe
+          // Quick time event waiting time based on fish
           SKAction.wait(forDuration: Double(fish.timeHook)),
-          // Verificar espado e mudar para não pescou caso em bitFishState
+          // Check spade and change to not fished case in bitFishState
           SKAction.run {
             self.delegate?.endQuickTimeEvent()
-            print("QuickTimeEvent --->")
+            
           }
         ])
         
         node?.run(actionHusk)
         
-      } else { // Caso não pegar o peixe mudar o status
-        print("No bitFish --->")
+      } else { // If you don't catch the fish, change the status
         delegate?.notGetFish()
       }
       
     }
   }
   
-  // Gera o peixe baseado em uma probalidade
+  // Generate the fish based on a probability
   func makeFish() -> Fish {
     let ramdom = randomInteger(low: 0, high: 100)
     
@@ -121,7 +118,7 @@ extension Fishing {
     case 76...100:
       return Golden()
     default:
-      fatalError("Deu ruim no peixe")
+      fatalError("The fish went bad")
     }
   }
   

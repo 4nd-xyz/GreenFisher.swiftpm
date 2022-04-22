@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  GamePad.swift
 //  
 //
 //  Created by Anderson on 07/04/22.
@@ -9,6 +9,7 @@ import Foundation
 import SpriteKit
 
 class GamePad: SKNode {
+  
   let actionButtonBegan: ((Controller) -> Void)
   let actionButtonEnded: ((Controller) -> Void)
   

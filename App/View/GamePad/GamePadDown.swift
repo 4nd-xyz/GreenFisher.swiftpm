@@ -1,20 +1,25 @@
 //
-//  GamePad.swift
-//  wwdc2022
+//  GamepadDown.swift
+//  
 //
 //  Created by Anderson on 07/04/22.
 //
 
+import Foundation
 import SpriteKit
 
-class GamePadRight: GamePadBase {
+class GamepadDown: GamePadBase {
+
   override init(actionButtonBegan: @escaping ((Controller) -> Void), actionButtonEnded: @escaping ((Controller) -> Void)) {
     super.init(actionButtonBegan: actionButtonBegan, actionButtonEnded: actionButtonEnded)
-    self.path = .makeRec(width: 50, height: 50, round: 5, roundCorner: [.topRight, .bottomRight])
-    let sprite = SKSpriteNode.makeSystemImage(systemName: "arrowtriangle.right.fill", size: 30, color: .lightGray)
-    sprite.position = CGPoint(x: frame.width / 2, y: frame.height / 2)
-    addChild(sprite)
+    let path: CGPath = .makeRec(width: 50, height: 50, round: 5, roundCorner: [.topLeft, .topRight])
+    self.path = path
     background.path = path
+    
+    let sprite = SKSpriteNode.makeSystemImage(systemName: "arrowtriangle.down.fill", size: 30, color: .lightGray)
+    sprite.position = CGPoint(x: frame.width / 2, y: frame.height / 2)
+    
+    addChild(sprite)
   }
   
   required init?(coder aDecoder: NSCoder) {
@@ -23,11 +28,11 @@ class GamePadRight: GamePadBase {
   
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     super.touchesBegan(touches, with: event)
-    actionButtonBegan(.rightArrow)
+    actionButtonBegan(.downArrow)
   }
   
   override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
     super.touchesEnded(touches, with: event)
-    actionButtonEnded(.rightArrow)
+    actionButtonEnded(.downArrow)
   }
 }

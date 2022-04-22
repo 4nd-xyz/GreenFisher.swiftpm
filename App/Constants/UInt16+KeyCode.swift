@@ -7,10 +7,10 @@
 
 import Foundation
 
-extension UInt16 {
-  static let space       : UInt16 = 0x31
-  static let leftArrow   : UInt16 = 0x7B
-  static let rightArrow  : UInt16 = 0x7C
-  static let downArrow   : UInt16 = 0x7D
-  static let upArrow     : UInt16 = 0x7E
+extension UInt32 {
+  static let space       : UInt32 = 0
+  static let leftArrow   : UInt32 = BitMask.edgeLeft
+  static let rightArrow  : UInt32 = BitMask.edgeRight
+  static let downArrow   : UInt32 = BitMask.edgeDown
+  static let upArrow     : UInt32 = BitMask.edgeUp
 }
