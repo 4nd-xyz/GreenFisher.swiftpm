@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  GameOver.swift
 //  
 //
 //  Created by Anderson on 07/04/22.
@@ -13,10 +13,10 @@ public final class GameOver: SKScene {
     SKAction.moveTo(x: frame.width + PixelSize.character, duration: 5),
     SKAction.repeatForever(
       SKAction.animate(with:
-                        PlayerSpriteSheet.makeAnimation(origin: PlayerSpriteRect.right),
-                       timePerFrame: 0.1)
+       PlayerSpriteSheet.makeAnimation(origin: PlayerSpriteRect.right),
+       timePerFrame: 0.1
+      )
     ),
-    
   ])
   
   private var skSPrite: SKSpriteNode = {
@@ -35,14 +35,12 @@ public final class GameOver: SKScene {
     let texture = PopupSpriteSheet.makeAngry()
     texture.filteringMode = .nearest
     let sprite = SKSpriteNode(texture: texture)
-    sprite.setScale(Scale.character)
     sprite.zPosition = Zposition.popUpInfo
     return sprite
   }()
   
   private lazy var continueLabel: SKLabelNode = {
-    let str = "  Tap to screen continue"
-    
+    let str = "Tap to screen restart"
     let label = SKLabelNode(text: str)
     label.fontName = UIFont.makeFont()
     label.fontSize = 24
@@ -53,19 +51,10 @@ public final class GameOver: SKScene {
   }()
   
   private lazy var gameOver: SKLabelNode = {
-    let str = """
-        GAMER
-         OVER
-     """
-    
-    let label = SKLabelNode(text: str)
-    label.fontName = UIFont.makeFont()
-    label.fontSize = 100
-    label.zPosition = Zposition.popUpInfo
+    let label = SKLabelNode(attributedText: .makeGameOver())
     label.numberOfLines = 2
-    label.verticalAlignmentMode = .center
-    label.fontColor = ._0x0
-    
+    label.zPosition = Zposition.popUpInfo
+    label.horizontalAlignmentMode = .center
     return label
   }()
   
@@ -77,11 +66,11 @@ public final class GameOver: SKScene {
     addChild(ground)
     addChild(gameOver)
     addChild(skSPrite)
-    addChild(popAngry)
+    skSPrite.addChild(popAngry)
     addChild(continueLabel)
     
     ground.position = CGPoint(x: PixelSize.ground / 2, y: PixelSize.ground / 2)
-    gameOver.position = CGPoint(x: Screen.screenWidth / 2, y:  (Screen.screenHeight -  gameOver.frame.height))
+    gameOver.position = CGPoint(x: frame.width / 2, y:  frame.height / 2)
     
     ground.createMap()
   }
@@ -91,20 +80,16 @@ public final class GameOver: SKScene {
     
     backgroundColor = .clear
     
-    skSPrite.position =  CGPoint(x: Screen.screenWidth / 2, y: gameOver.position.y - (skSPrite.frame.height * 4))
-    popAngry.position = CGPoint(x: skSPrite.position.x + (skSPrite.frame.width / 2), y: skSPrite.position.y + skSPrite.frame.height)
-    continueLabel.position = CGPoint(x: Screen.screenWidth / 2, y: skSPrite.position.y - (continueLabel.frame.height * 4))
-
+    skSPrite.position =  CGPoint(x: frame.width / 2, y: gameOver.position.y - (skSPrite.frame.height * 3))
+    popAngry.position = CGPoint(x: popAngry.frame.width * 0.2, y: popAngry.frame.height)
+    continueLabel.position = CGPoint(x: frame.width / 2, y: skSPrite.position.y - (continueLabel.frame.height * 4))
     skSPrite.run(actionPlayer)
-    popAngry.run(SKAction.moveTo(x: frame.width + popAngry.frame.width, duration: 5))
     
   }
   
   public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-    print("Deu ruim no python")
     skSPrite.removeAllActions()
-    popAngry.removeAllActions()
-    guard  let view = self.view as? MySKView else { fatalError("Deu ruim na view ") }
+    guard let view = self.view as? MySKView else { fatalError("Bad view") }
     view.presentMainSceneTransition()
   }
   

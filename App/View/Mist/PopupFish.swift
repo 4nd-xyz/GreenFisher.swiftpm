@@ -19,7 +19,7 @@ class PopupFish: SKShapeNode {
   init(fish: Fish) {
     let stringFish = """
       \(fish.name)
-      KG \(fish.weight)
+      LB \(fish.weight)
       CM \(fish.length)
     """
     

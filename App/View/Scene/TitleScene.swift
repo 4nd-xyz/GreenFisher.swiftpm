@@ -47,19 +47,7 @@ public final class TitleScene: SKScene {
   }()
   
   private lazy var gameOver: SKLabelNode = {
-    let str = """
-        GREEN
-        FISHING
-     """
-    
-    let attrString = NSMutableAttributedString(string: str)
-    let paragraphStyle = NSMutableParagraphStyle()
-    paragraphStyle.alignment = .center
-    let range = NSRange(location: 0, length: str.count)
-    attrString.addAttribute(.paragraphStyle, value: paragraphStyle, range: range)
-    attrString.addAttributes([.font : UIFont(name: UIFont.makeFont(), size: Screen.screenWidth * 0.1)!, .foregroundColor : UIColor._0x1!], range: range)
-    
-    let label = SKLabelNode(attributedText: attrString)
+    let label = SKLabelNode(attributedText: .makeTitle())
     label.zPosition = Zposition.popUpInfo
     label.numberOfLines = 2
     label.verticalAlignmentMode = .top
@@ -85,15 +73,14 @@ public final class TitleScene: SKScene {
     watter.createMap()
     edge.createMap()
     
-    // Cenarios
+    // Scenery
     ground.position = CGPoint(x: PixelSize.ground / 2, y: PixelSize.ground / 2)
-    watter.position = CGPoint(x: frame.width * 0.26, y: frame.height * 0.2)
+    watter.position = CGPoint(x: frame.width * 0.25, y: frame.height * 0.2)
     edge.position = CGPoint(x: watter.position.x, y: watter.position.y)
     
     // Labels
     gameOver.position = CGPoint(x: frame.width / 2, y: frame.height)
     continueLabel.position = CGPoint(x: frame.width / 2, y: watter.position.y + (watter.calculateAccumulatedFrame().height / 2.5))
-    
     
     // Caracter
     skSPrite.position =  CGPoint(x: frame.width / 2 + PixelSize.character, y: watter.position.y - PixelSize.size - 4)

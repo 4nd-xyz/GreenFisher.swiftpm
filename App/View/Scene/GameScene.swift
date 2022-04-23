@@ -9,7 +9,8 @@ public final class GameScene: SKScene {
   private let watter = Watter()
   private let playerNode = PlayerSKNode()
   private let fishermanNode = FishermanSKNode()
-  private lazy var score = Score(action: endGame)
+  private(set) lazy var score = Score(action: endGame)
+  
   private lazy var gamePad: GamePad = {
     return GamePad(
       actionButtonBegan:  playerNode.actionButtonBegan,
@@ -27,7 +28,7 @@ public final class GameScene: SKScene {
   public override func sceneDidLoad() {
     super.sceneDidLoad()
     
-    scaleMode = .aspectFit
+    scaleMode = .aspectFill
     addChild(ground)
     addChild(tree)
     addChild(watter)
@@ -40,58 +41,55 @@ public final class GameScene: SKScene {
     addChild(paredeEsquerda)
     addChild(paredeDireta)
     
-    // GamePad
-    gamePad.zPosition = Zposition.controller
-    gamePad.position = CGPoint(x: frame.width * 0.05, y: frame.height * 0.2)
-    controllerSpace.zPosition = Zposition.controller
-    
-    controllerSpace.position = CGPoint(x: Screen.screenWidth - controllerSpace.calculateAccumulatedFrame().width, y: gamePad.position.y + controllerSpace.frame.height * 2)
-    controllerSpace.path = .makeCirlce(radius: 30)
-    
-    // Cenario
-    ground.position = CGPoint(x: PixelSize.ground / 2, y: PixelSize.ground / 2)
-    tree.position = CGPoint(x: PixelSize.tree / 2, y: PixelSize.tree / 2)
-    watter.position = CGPoint(x: frame.width * 0.26, y: frame.height * 0.3)
-    edge.position = CGPoint(x: watter.position.x, y: watter.position.y)
-    score.position =  CGPoint(x: frame.width / 2, y: frame.height * 0.8)
-    
-    // Character
-    fishermanNode.position = CGPoint(x: frame.width * 0.7, y: frame.height * 0.3)
-    playerNode.position = CGPoint(x: Screen.screenWidth * 0.1, y: Screen.screenHeight / 2)
-    
-    // Cria cenario
+    // make cenario
     ground.createMap()
     tree.createMap()
     watter.createMap()
     edge.createMap()
     
-    // Criar a parede
+    // Position a parede
     paredeEsquerda.position = CGPoint(x: -paredeEsquerda.frame.width, y: 0)
     paredeDireta.position = CGPoint(x: Screen.screenWidth, y: 0)
     
-  }
-  
-  public override func update(_ currentTime: TimeInterval) {
-    playerNode.update(currentTime)
+    // Position GamePad
+    gamePad.zPosition = Zposition.controller
+    gamePad.position = CGPoint(x: frame.width * 0.05, y: frame.height * 0.2)
+    controllerSpace.zPosition = Zposition.controller
     
-    // Colocar mecanica baseada em tem
-    // para almentar adificuldade do bot de pesca
+    let spaceFrame = controllerSpace.calculateAccumulatedFrame().width * 2
+    controllerSpace.position = CGPoint(x: Screen.screenWidth - spaceFrame, y: gamePad.position.y + controllerSpace.frame.height * 2)
+    controllerSpace.path = .makeCirlce(radius: 30)
+    
+    // Position Scenario
+    ground.position = CGPoint(x: PixelSize.ground / 2, y: PixelSize.ground / 2)
+    tree.position = CGPoint(x: PixelSize.tree / 2, y: PixelSize.tree / 2)
+    watter.position = CGPoint(x: frame.width * 0.26, y: frame.height * 0.3)
+    edge.position = CGPoint(x: watter.position.x, y: watter.position.y)
+    score.position =  CGPoint(x: frame.width / 2, y: frame.height - (PixelSize.ground / 2))
+    
+    // Position Character
+    fishermanNode.position =  CGPoint(x: frame.width / 2 + PixelSize.character, y: watter.position.y + (PixelSize.character / 4))
+    playerNode.position = CGPoint(x: frame.width / 2 - PixelSize.character, y: watter.position.y + (PixelSize.character / 8))
+    
   }
   
   public override func didMove(to view: SKView) {
-    print("didMove GameScene")
     super.didMove(to: view)
     backgroundColor = .clear
     
-    // Resetar os estados
+    // Reset states
     playerNode.resetNode()
     fishermanNode.resetNode()
     
-    // Resetar o placar
+    // Reset the score
     score.resetNode()
     
     // Reset Color
     resetGamePad()
+  }
+  
+  public override func update(_ currentTime: TimeInterval) {
+    playerNode.update(currentTime)
   }
   
   private func resetGamePad() {
@@ -106,19 +104,19 @@ public final class GameScene: SKScene {
     let paredeNode = SKSpriteNode(color: .clear, size: CGSize(width: Screen.screenWidth * 0.05, height: Screen.screenHeight))
     paredeNode.anchorPoint = .zero
     
-    // Colocar o corpo depois antes de setar a posição
+    // Place the body after before setting the position
     paredeNode.physicsBody = .init(edgeLoopFrom: paredeNode.frame)
     paredeNode.physicsBody?.categoryBitMask = BitMask.node
     return paredeNode
   }
   
   func endGame(winner: Winner) {
-    //Para o bot
+    //to the bot
     playerNode.stateMachine.enter(PlayerIdle.self)
     fishermanNode.stateMachine.enter(FishermanStop.self)
     
-    // Tempo de espera
-    guard let view = self.view as? MySKView else { fatalError("--> Deu ruim na view") }
+    // Waiting time
+    guard let view = self.view as? MySKView else { fatalError("--> Bad view") }
     (winner == .player) ? view.presentWin() : view.presentGameOver()
     
   }
