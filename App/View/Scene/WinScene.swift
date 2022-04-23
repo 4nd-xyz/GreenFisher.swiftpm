@@ -62,7 +62,12 @@ public final class WinScene: SKScene {
     addChild(continueLabel)
     
     ground.position = CGPoint(x: PixelSize.ground / 2, y: PixelSize.ground / 2)
+    
+    skSPrite.position =  CGPoint(x: frame.width / 2, y: frame.height - (skSPrite.frame.height * 3))
+    popAngry.position = CGPoint(x: skSPrite.position.x + (skSPrite.frame.width / 2), y: skSPrite.position.y + skSPrite.frame.height)
     gameOver.position = CGPoint(x: frame.width / 2, y:  skSPrite.position.y - gameOver.frame.height * 1.2)
+    continueLabel.position = CGPoint(x: Screen.screenWidth / 2, y: gameOver.position.y - (continueLabel.frame.height * 2.0))
+    
     
     ground.createMap()
     
@@ -73,9 +78,7 @@ public final class WinScene: SKScene {
     
     backgroundColor = .clear
     
-    skSPrite.position =  CGPoint(x: frame.width / 2, y: frame.height - (skSPrite.frame.height * 3))
-    popAngry.position = CGPoint(x: skSPrite.position.x + (skSPrite.frame.width / 2), y: skSPrite.position.y + skSPrite.frame.height)
-    continueLabel.position = CGPoint(x: Screen.screenWidth / 2, y: gameOver.position.y - (continueLabel.frame.height * 2.0))
+    
   }
   
   public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
